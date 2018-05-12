@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Gallery</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+			      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+				<a class="navbar-brand" href="index.html">My App</a>
+			</div>
+		    <div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="contacts.html">My Contacts</a></li>
+					<li class="active"><a href="gallery.html">My Gallery</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a  href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<h2 class="text-center">My Gallery</h2>
+		<div class="row">
+			<a class="btn btn-default btn-circle pull-right"
+				href="gallery-add.html"> <span class="glyphicon glyphicon-plus"></span>
+				Add
+			</a>
+		</div>
+		<br>
+		<div class="row">
+			<div id="imageExists">
+
+			</div>
+			<div id="noImageExists">
+				<h3 class="text-center">No Images found. Please upload your images to list here.</h3>
+			</div>
+		</div>
+	</div>
+	<script src="js/script.js"></script>
+    <script>
+		var images;
+
+        $( document ).ready(function() {
+			if (!isLoggedIn) { window.location.href = 'index.html'; }
+			fetchImages();
+		});
+
+		function fetchImages() {
+			$('#imageExists').hide();
+            $('#noImageExists').hide();
+
+			$.ajax({
+				url: `${galleryService}/gallery`,
+				type: 'GET',
+				success: function(response) {
+					images = response.images;
+					displayImages(images);
+				},
+				error: function(xhr){ console.log(xhr.statusText); }
+			});
+		}
+
+		function displayImages(images) {
+			if (images.length > 0) {
+				$('#imageExists').show();
+				images.forEach( (x, i) => {
+					$('#imageExists').append(
+						`<div class="col-md-3" id="image${i}">
+							<div class="thumbnail thumbnail-height">
+								<a href="${x.url}">
+									<img class="img-rounded" src="${x.url}" alt="Image">
+									<span class="caption">${x.size}</span>
+								</a>
+								<a class="top-right" href="#" onclick="deleteImage(${i})">
+									<span class="glyphicon glyphicon-trash"></span>
+								</a>
+							</div>
+						</div>`
+					);
+				});
+			} else {
+				$('#noImageExists').show();
+			}
+		}
+
+		function deleteImage(i) {
+			$.ajax({
+				url: `${galleryService}/gallery?delete=${images[i].key}`,
+				type: 'DELETE',
+				success: function(response) { console.log(response); },
+				error: function(xhr){ console.log(xhr.statusText); }
+			});
+			images.splice(i, 1);
+			$(`#image${i}`).remove();
+			if (images.length == 0) {
+				$('#imageExists').hide();
+				$('#noImageExists').show();
+			}
+		}
+
+    </script>
+</body>
+</html>

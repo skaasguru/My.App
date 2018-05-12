@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Gallery - Add</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+			      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+				<a class="navbar-brand" href="index.html">My App</a>
+			</div>
+		    <div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="contacts.html">My Contacts</a></li>
+					<li class="active"><a href="gallery.html">My Gallery</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="loginservlet?logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	
+	<div class="container">
+		
+		<div class="col-md-8 col-md-offset-2">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="text-center">Add Image</h2>
+				</div>
+				<div class="panel-body">
+					<form class="form-horizontal" id="galleryForm">
+						<div class="form-group">
+							<label class="control-label col-sm-2" for="name">Name:</label>
+							<div class="col-sm-10">
+								<input type="file" class="form-control" id="fileInput" placeholder="Choose your image" name="file">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="text-center">
+								<button type="submit" class="btn btn-primary">Submit</button>
+								<a class="btn btn-default" href="gallery.html">Cancel</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/script.js"></script>
+    <script>
+        $( document ).ready(function() {
+			if (!isLoggedIn) { window.location.href = 'index.html'; }
+			
+			$('#galleryForm').submit(function (e) {
+				e.stopPropagation();
+				e.preventDefault();
+
+				let file = $('#fileInput').prop('files')[0];
+				let data = {
+					'filename': file ? file.name : "filename.jpg"
+				};
+				console.log(data);
+
+				$.ajax({
+                    url: `${galleryService}/gallery`,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) { uploadFile(response.url, file)},
+                    error: function(xhr){ console.log(xhr.statusText); }
+				});
+
+			});
+		});
+
+		function uploadFile(url, file) {
+			$.ajax({
+				type: 'PUT',
+				url: url,
+				data: file,
+				contentType: 'binary/octet-stream',
+				processData: false,
+				beforeSend: function() {},
+				success: function(response) { alert('File uploaded'); },
+				error: function(xhr){ console.log(xhr.statusText); }
+			});
+		}
+	</script>
+</body>
+</html>

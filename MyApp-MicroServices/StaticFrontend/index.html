@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My App!</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+			      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+				<a class="navbar-brand" href="index.html">My App</a>
+			</div>
+		    <div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="index.html">Dashboard</a></li>
+					<li><a href="contacts.html">My Contacts</a></li>
+					<li><a href="gallery.html">My Gallery</a></li>
+				</ul>
+                <ul class="nav navbar-nav navbar-right" id="loginNavTrue">
+                    <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                </ul>
+				<ul class="nav navbar-nav navbar-right" id="loginNavFalse">
+					<li><a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+					<li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+			</div>
+		</div>
+	</nav>
+	
+	<div class="container">
+        <div id="loginTrue">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="text-center">My Contacts</h2>
+                        </div>
+                        <div class="panel-body text-center">
+                            <p>You have <b><span id="contactsCount"></span></b> contacts in your account.</p>
+                            <br>
+                            <br>
+                            <div class="btn-group">
+                                <a href="contacts.html" class="btn btn-default">View Contacts</a>
+                                <a href="contacts-add.html" class="btn btn-default">Add Contact</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="text-center">My Gallery</h2>
+                        </div>
+                        <div class="panel-body text-center">
+                            <p>You have <b><span id="imagesCount"></span></b> photos in your account.</p>
+                            <br>
+                            <br>
+                            <div class="btn-group">
+                                <a href="gallery.html" class="btn btn-default">View Photos</a>
+                                <a href="gallery-add.html" class="btn btn-default">Add Photo</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-center">	
+                    <button class="btn btn-danger" onclick="wipeAll()">Delete Account and clear everything</button>
+                </div>
+            </div>
+        </div>
+        <div id="loginFalse">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h2 class="text-center">Please Login to Continue</h2>
+                        </div>
+                        <div class="panel-body text-center">
+                            <p>You are not logged in. Please login to view your dashboard.</p>
+                            <p>If you're a new user, please register a new account.</p>
+                            <br>
+                            <br>
+                            <div class="btn-group">
+                                <a href="login.html" class="btn btn-primary">Login</a>
+                                <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+    <script>
+        $( document ).ready(function() {
+
+            $('#loginNavTrue').hide();
+            $('#loginTrue').hide();
+
+            $('#loginNavFalse').hide();
+            $('#loginFalse').hide();
+
+            if (isLoggedIn) {
+                $('#loginNavTrue').show();
+                $('#loginTrue').show();
+
+                $.ajax({
+                    url: `${contactService}/contacts`,
+                    type: 'GET',
+                    success: function(response) { $('#contactsCount').text(response.contacts.length); },
+                    error: function(xhr){ console.log(xhr.statusText); }
+                });
+
+                $.ajax({
+                    url: `${galleryService}/gallery`,
+                    type: 'GET',
+                    success: function(response) { $('#imagesCount').text(response.images.length); },
+                    error: function(xhr){ console.log(xhr.statusText); }
+                });
+
+            } else {
+                $('#loginNavFalse').show();
+                $('#loginFalse').show();
+            }
+
+        });
+        
+        function wipeAll() {
+            $.ajax({
+                url: `${contactService}/contacts`,
+                type: 'PUT',
+                success: function(response) { console.log(response) },
+                error: function(xhr){ console.log(xhr.statusText); }
+            });
+
+            $.ajax({
+                url: `${galleryService}/gallery`,
+                type: 'PUT',
+                success: function(response) { console.log(response) },
+                error: function(xhr){ console.log(xhr.statusText); }
+            });
+
+            logout();
+        }
+    </script>
+</body>
+</html>

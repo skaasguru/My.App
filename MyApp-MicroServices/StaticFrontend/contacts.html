@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Contacts</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+			      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+				<a class="navbar-brand" href="index.html">My App</a>
+			</div>
+		    <div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">Dashboard</a></li>
+					<li class="active"><a href="contacts.html">My Contacts</a></li>
+					<li><a href="gallery.html">My Gallery</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<h2 class="text-center">My Contacts</h2>
+		<a class="btn btn-default btn-circle pull-right" href="contacts-add.html">
+			<span class="glyphicon glyphicon-plus"></span> Add
+		</a>
+		<table class="table table-hover" id="contactsTable">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Phone No.</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+		<div id="noContactsMessage">
+			<h3 class="text-center">No Contacts found. Please add new contacts to list here.</h3>
+		</div>
+	</div>
+	<script src="js/script.js"></script>
+    <script>
+		var contacts;
+
+        $( document ).ready(function() {
+			if (!isLoggedIn) { window.location.href = 'index.html'; }
+
+			$('#contactsTable').hide();
+			$('#noContactsMessage').hide();
+			
+			$.ajax({
+				url: `${contactService}/contacts`,
+				type: 'GET',
+				success: function(response) {
+					contacts = response.contacts;
+					displayContacts(contacts);
+				},
+				error: function(xhr){ console.log(xhr.statusText); }
+			});
+		});
+		
+		function displayContacts(contacts) {
+			if (contacts.length > 0) {
+				$('#contactsTable').show();
+				contacts.forEach( (x, i) => {
+					$('#contactsTable > tbody').append(
+						`<tr id="contact${i}">
+							<td>${x.id}</td>
+							<td>${x.name}</td>
+							<td>${x.phone}</td>
+							<td>
+								<a href="#" onclick="deleteContact(${i})">
+									<span class="glyphicon glyphicon-trash"></span>
+								</a>
+							</td>
+						</tr>`
+					);
+				});
+			} else {
+				$('#noContactsMessage').show();
+			}
+		}
+
+		function deleteContact(i) {
+			$.ajax({
+				url: `${contactService}/contacts?delete=${contacts[i].id}`,
+				type: 'DELETE',
+				success: function(response) { console.log(response); },
+				error: function(xhr){ console.log(xhr.statusText); }
+			});
+			contacts.splice(i, 1);
+			$(`#contact${i}`).remove();
+			if (contacts.length == 0) {
+				$('#contactsTable').hide();
+				$('#noContactsMessage').show();
+			}
+		}
+    </script>
+</body>
+</html>
