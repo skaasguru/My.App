@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.datastax.driver.core.utils.UUIDs;
+import com.skaas.core.AppConfig;
 import com.skaas.core.CassandraConnector;
 
 /**
@@ -19,7 +20,7 @@ import com.skaas.core.CassandraConnector;
 public class Signupservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final String fileLocation = "E:\\eclipse\\temp_files\\Uploads";
+	private static final String fileLocation = AppConfig.fileLocation;
 	
     /**
      * @see HttpServlet#HttpServlet()

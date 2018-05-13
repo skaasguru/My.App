@@ -22,6 +22,7 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.skaas.core.AppConfig;
 
 /**
  * Servlet implementation class Galleryservlet
@@ -32,7 +33,7 @@ maxFileSize=1024*1024*10,      // 10MB
 maxRequestSize=1024*1024*50)   // 50MB
 public class Galleryservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String bucket = "yourbucketname";
+	private static final String bucket = AppConfig.bucket;
 	
     /**
      * @see HttpServlet#HttpServlet()

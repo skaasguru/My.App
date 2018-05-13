@@ -7,6 +7,7 @@ com.amazonaws.services.s3.model.ListObjectsV2Request,
 com.amazonaws.services.s3.model.ListObjectsV2Result,
 com.amazonaws.services.s3.model.ObjectListing,
 com.amazonaws.services.s3.model.S3ObjectSummary" %>
+<%@ page import="com.skaas.core.AppConfig" %>
 
 <%
 	String user_id = (String)session.getAttribute("id");
@@ -14,7 +15,7 @@ com.amazonaws.services.s3.model.S3ObjectSummary" %>
 	if ( !isLoggedIn ){
 		response.sendRedirect("index.jsp");
 	}
-	String bucketName = "yourbucketname";
+	String bucketName = AppConfig.bucket;
 %>
 
 <!DOCTYPE html>

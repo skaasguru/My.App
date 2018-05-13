@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ page import="java.io.File" %>
+<%@ page import="java.io.File,com.skaas.core.AppConfig" %>
 
 <%
 	String user_id = (String)session.getAttribute("id");
@@ -7,7 +7,7 @@
 	if ( !isLoggedIn ){
 		response.sendRedirect("index.jsp");
 	}
-	String fileLocation = "E:\\eclipse\\temp_files\\Uploads";
+	String fileLocation = AppConfig.fileLocation;
 %>
 
 <!DOCTYPE html>

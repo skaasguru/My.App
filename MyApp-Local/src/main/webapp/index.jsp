@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@page import="java.util.List"%>
 <%@page import="com.datastax.driver.core.Row"%>
-<%@ page import="com.skaas.core.CassandraConnector,java.io.File" %>
+<%@ page import="com.skaas.core.CassandraConnector,com.skaas.core.AppConfig,java.io.File" %>
 <%
 	String user_id = (String) session.getAttribute("id");
 	Boolean isLoggedIn = (user_id != null);
 	
-	String fileLocation = "E:\\eclipse\\temp_files\\Uploads";
+	String fileLocation = AppConfig.fileLocation;
 %>
 
 <!DOCTYPE html>

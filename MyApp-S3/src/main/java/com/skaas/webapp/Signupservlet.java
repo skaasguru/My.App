@@ -19,6 +19,7 @@ import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import com.datastax.driver.core.utils.UUIDs;
+import com.skaas.core.AppConfig;
 import com.skaas.core.CassandraConnector;
 
 /**
@@ -27,7 +28,7 @@ import com.skaas.core.CassandraConnector;
 public class Signupservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final String bucket = "yourbucketname";
+	private static final String bucket = AppConfig.bucket;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -63,7 +64,7 @@ public class Signupservlet extends HttpServlet {
 			for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
 				keys.add(new KeyVersion(objectSummary.getKey()));
 			}
-
+			
 			if (keys.size() > 0) {				
 				s3.deleteObjects((new DeleteObjectsRequest(bucket)).withKeys(keys));
 			}

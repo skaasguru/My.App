@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.skaas.core.AppConfig;
+
 /**
  * Servlet implementation class Galleryservlet
  */
@@ -27,7 +29,7 @@ maxRequestSize=1024*1024*50)   // 50MB
 public class Galleryservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final String fileLocation = "E:\\eclipse\\temp_files\\Uploads";
+	private static final String fileLocation = AppConfig.fileLocation;
 
     /**
      * @see HttpServlet#HttpServlet()

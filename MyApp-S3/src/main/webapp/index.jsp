@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@page import="java.util.List"%>
 <%@page import="com.datastax.driver.core.Row"%>
-<%@ page import="com.skaas.core.CassandraConnector,java.io.File" %>
+<%@ page import="com.skaas.core.CassandraConnector,com.skaas.core.AppConfig" %>
 <%@ page import="com.amazonaws.services.s3.AmazonS3,
 com.amazonaws.services.s3.AmazonS3Client,
 com.amazonaws.services.s3.AmazonS3ClientBuilder,
@@ -14,7 +14,7 @@ com.amazonaws.services.s3.model.S3ObjectSummary" %>
 	String user_id = (String) session.getAttribute("id");
 	Boolean isLoggedIn = (user_id != null);
 	
-	String bucketName = "yourbucketname";
+	String bucketName = AppConfig.bucket;
 %>
 
 <!DOCTYPE html>
