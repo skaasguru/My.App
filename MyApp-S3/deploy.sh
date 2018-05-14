@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-export CODE_URL=""
+export CODE_URL="https://s3.ap-south-1.amazonaws.com/training-downloads/adobe/MyApp-S3.zip"
 
 create_swap(){
     fallocate -l 2G /swapfile
@@ -16,6 +16,9 @@ install_java_and_tomcat(){
     apt-get install -y default-jdk tomcat8 maven unzip
     echo JAVA_HOME=\"$(readlink -f /usr/bin/java | sed "s:/bin/java::")\" >> /etc/environment
     source /etc/environment
+
+    systemctl start tomcat8
+    systemctl enable tomcat8
 }
 
 install_cassandra(){
@@ -44,7 +47,7 @@ bootstrap_db(){
             echo "Cassandra Ready... Creating DB..."
             cqlsh -f schema.cql
             break
-        else;
+        else
             echo "Cassandra is not Receiving connections... Trying again in 10 seconds"
             sleep 10
         fi

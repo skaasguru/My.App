@@ -21,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.skaas.core.AppConfig;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -37,7 +38,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 public class Galleryservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String bucket = "yourbucketname";
+	private static final String bucket = AppConfig.bucket;
 	private static HttpClient HTTP = HttpClientBuilder.create().build();
 
     public Galleryservlet() {
@@ -51,7 +52,7 @@ public class Galleryservlet extends HttpServlet {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
-		HttpGet authRequest = new HttpGet("http://localhost:8080/authservice/token");
+		HttpGet authRequest = new HttpGet(AppConfig.authServiceEndpoint + "/token");
 		authRequest.setHeader("Authorization", request.getHeader("Authorization"));
 		HttpResponse authResponse = HTTP.execute(authRequest);
 		String authJson = EntityUtils.toString(authResponse.getEntity());
@@ -106,7 +107,7 @@ public class Galleryservlet extends HttpServlet {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
-		HttpGet authRequest = new HttpGet("http://localhost:8080/authservice/token");
+		HttpGet authRequest = new HttpGet(AppConfig.authServiceEndpoint + "/token");
 		authRequest.setHeader("Authorization", request.getHeader("Authorization"));
 		HttpResponse authResponse = HTTP.execute(authRequest);
 		String authJson = EntityUtils.toString(authResponse.getEntity());
@@ -140,7 +141,7 @@ public class Galleryservlet extends HttpServlet {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
-		HttpGet authRequest = new HttpGet("http://localhost:8080/authservice/token");
+		HttpGet authRequest = new HttpGet(AppConfig.authServiceEndpoint + "/token");
 		authRequest.setHeader("Authorization", request.getHeader("Authorization"));
 		HttpResponse authResponse = HTTP.execute(authRequest);
 		String authJson = EntityUtils.toString(authResponse.getEntity());
@@ -177,7 +178,7 @@ public class Galleryservlet extends HttpServlet {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
-		HttpGet authRequest = new HttpGet("http://localhost:8080/authservice/token");
+		HttpGet authRequest = new HttpGet(AppConfig.authServiceEndpoint + "/token");
 		authRequest.setHeader("Authorization", request.getHeader("Authorization"));
 		HttpResponse authResponse = HTTP.execute(authRequest);
 		String authJson = EntityUtils.toString(authResponse.getEntity());

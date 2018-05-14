@@ -12,7 +12,7 @@ public class CassandraConnector {
     
     
 	public CassandraConnector() {
-		cluster = Cluster.builder().addContactPoint("35.160.32.65").build();
+		cluster = Cluster.builder().addContactPoint(AppConfig.dbEndpoint).build();
         session = cluster.connect();
         session.execute("USE myapp");
 	}

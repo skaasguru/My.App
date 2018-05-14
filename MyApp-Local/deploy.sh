@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-export CODE_URL=""
+export CODE_URL="https://s3.ap-south-1.amazonaws.com/training-downloads/adobe/MyApp-Local.zip"
 
 create_swap(){
     fallocate -l 2G /swapfile
@@ -49,7 +49,7 @@ bootstrap_db(){
             echo "Cassandra Ready... Creating DB..."
             cqlsh -f schema.cql
             break
-        else;
+        else
             echo "Cassandra is not Receiving connections... Trying again in 10 seconds"
             sleep 10
         fi
